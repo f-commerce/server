@@ -2,11 +2,31 @@ import { Schema, model } from "mongoose";
 
 
 const productSchema = new Schema({
-  title: String,
-  price: Number,
-  description: String,
-  category: String,
-  image: String,
+  title: {
+    type:String,
+    required:true,
+    index:true,
+},
+  price: {
+    type:Number,
+    required:true,
+    index:true,
+},
+  description: {
+    type:String,
+    required:true,
+    index:true,
+},
+  category: {
+    type:String,
+    required:true,
+    index:true,
+},
+  image: {
+    type:String,
+    required:true,
+    index:true,
+},
   rating: Object,
 //reviews: Array
 },

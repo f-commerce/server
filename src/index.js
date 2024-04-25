@@ -1,4 +1,4 @@
-import app from './config/app'
+import app from './config/app.js'
 import dbConnect from './config/dbConnect'
 // import { notFound, errorHandler } from './middlewares/errorHandler'
 // import authRoute from './routes/authRoute'
@@ -28,7 +28,7 @@ app.listen(PORT, () => {
 
   
   
-  // -_- middlewares para manejar errores
+  // -_- middlewares para man
   // app.use(notFound)
   // app.use(errorHandler)
   

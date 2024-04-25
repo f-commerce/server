@@ -1,31 +1,32 @@
-import UserModel from '../models/userModel'
+import UserModel from '../models/userModel.js'
 import jwt from 'jsonwebtoken';
-import Role from '../models/rolesModel';
+import Role from '../models/rolesModel.js';
 
 export const signUp = async (req, res) => {
     console.log('el signup controller ha empezado a funcionar')
     console.log(req.body)
-    const { name, email, mobile, password, roles } = req.body;
+    const { name, lastname, username, email, mobile, password } = req.body;
     const hashedPassword = await UserModel.encryptPassword(password); // Esperamos a que se resuelva la promesa para enviarla a la base de datos
 
     
     const newUser = new UserModel({
         name,
+        lastname,
+        username,
         email,
         mobile,
         password: hashedPassword, // Asignamos el valor cifrado de la contraseña luego de esperar a que se resuelva la promesa
-        roles
     })
     console.log(newUser)
 
     // -_- Verificar si los roles enviados existen en la base de datos (por el _id de la tabla roles) y asignarlos al usuario, si no tiene un rol se le asigna rol de usuario -_-
-    if (roles) {
-        const foundRoles = await Role.find({ name: { $in: roles } });
-        newUser.roles = foundRoles.map(role => role._id);
-    } else {
-        const role = await Role.findOne({ name: 'user' });
-        newUser.roles = [role._id];
-    }
+    // if (roles) {
+    //     const foundRoles = await Role.find({ name: { $in: roles } });
+    //     newUser.roles = foundRoles.map(role => role._id);
+    // } else {
+    //     const role = await Role.findOne({ name: 'user' });
+    //     newUser.roles = [role._id];
+    // }
     const savedUser = await newUser.save();
     //console.log(savedUser)
 
@@ -40,7 +41,6 @@ export const signUp = async (req, res) => {
 }
 // -_- ------------------- Iniciar sesión SOLO si eres usuario ------------------- -_- //
 export const signIn = async (req, res) => {
-    console.log('el signIn controller ha empezado a funcionar')
     const userFound = await UserModel.findOne({ email: req.body.email }).populate('roles'); //populate('roles') para traer los roles del usuario por el id de la tabla roles
     
     // -_- Verificar si el usuario existe y si la contraseña es correcta
@@ -57,7 +57,7 @@ export const signIn = async (req, res) => {
     // -_- Verificar si el usuario tiene el rol adecuado para iniciar sesión (en este caso, solo los user pueden iniciar sesión)
       const isUser = userFound.roles.some(role => role.name === 'user');
       if (!isUser) {
-          return res.status(403).json({ message: 'No tienes permiso para iniciar sesión como usuario, intenta como vendedor o administrador ;)' });
+          return res.status(403).json({ message: 'Sólo los usuarios pueden iniciar sesión, intenta registrarte primero, o si eres Administrador sigue el enlace de abajo ( tambien si eres hacker intenta hackear ;) )' });
       }
 
     //* console.log(userFound)

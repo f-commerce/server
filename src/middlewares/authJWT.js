@@ -41,6 +41,8 @@ export const isAdmin = async (req, res, next) => {
 
 };
 
+// ********* OJO FALTA POR VERIFICA IS USER EN MVP Y FUTURA IMPLEMENTACIÓN DE ISSELLER
+
 
 
 

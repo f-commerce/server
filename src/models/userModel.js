@@ -7,6 +7,17 @@ var userSchema = new Schema({
         required:true,
         index:true,
     },
+    lastname:{
+      type:String,
+      required:true,
+      index:true,
+  },
+    username:{
+        type:String,
+        required:true,
+        unique:true,
+    },
+    
     email:{
         type:String,
         required:true,
@@ -54,19 +65,10 @@ userSchema.statics.encryptPassword = async function(password) {
     throw new Error(error);
   }
 };
-
-
-
-
  // -_- Comparar contraseña
  userSchema.statics.comparePassword = async (password, receivedPassword) => {
    return await bcrypt.compare(password, receivedPassword);
  };
 
-
-
-
-//-_- Exportar el modelo
-// module.exports = model('User', userSchema);
-
+//-_- Exportar el modelo de usuario
 export default model('User', userSchema);

@@ -9,10 +9,18 @@ router.get("/", productsCtrl.getProducts);
 
 router.get("/:id", productsCtrl.getProductById);
 
-router.post( "/", [authJWT.verifyJWT, authJWT.isAdmin], productsCtrl.createProduct);
+router.post(
+  "/",
+  [authJWT.verifyJWT, authJWT.isAdmin],
+  productsCtrl.createProduct
+);
 
 router.put("/:id", authJWT.verifyJWT, productsCtrl.updateProductByID);
 
-router.delete("/:id", [authJWT.verifyJWT, authJWT.isAdmin], productsCtrl.deleteProduct);
+router.delete(
+  "/:id",
+  [authJWT.verifyJWT, authJWT.isAdmin],
+  productsCtrl.deleteProduct
+);
 
-export default router; // -_- exporta el objeto router para ser utilizado en otros archivos
+export default router;

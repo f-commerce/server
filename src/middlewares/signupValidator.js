@@ -3,6 +3,19 @@ import UserModel from '../models/userModel';
 
 
 // -_- ------------- comprobamos si el usuario ya existe ------------- -_- //
+export const schemaValidator = (schema) => (req, res, next) => { 
+   try {
+    schema.parse(req.body);
+    next();
+   } catch (error) {
+    return res.status(400).json({
+        error: error.errors.map(error => error.message)
+    });
+   }
+}
+
+
+
 export const checkDuplicateUsernameOrEmail = async (req, res, next) => {
     // Username
     const user = await UserModel.findOne({
