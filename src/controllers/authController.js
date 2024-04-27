@@ -5,7 +5,7 @@ import Role from '../models/rolesModel.js';
 export const signUp = async (req, res) => {
     console.log('el signup controller ha empezado a funcionar')
     console.log(req.body)
-    const { name, lastname, username, email, mobile, password } = req.body;
+    const { name, lastname, username, email, mobile, password, roles } = req.body;
     const hashedPassword = await UserModel.encryptPassword(password); // Esperamos a que se resuelva la promesa para enviarla a la base de datos
 
     
@@ -19,14 +19,14 @@ export const signUp = async (req, res) => {
     })
     console.log(newUser)
 
-    // -_- Verificar si los roles enviados existen en la base de datos (por el _id de la tabla roles) y asignarlos al usuario, si no tiene un rol se le asigna rol de usuario -_-
-    // if (roles) {
-    //     const foundRoles = await Role.find({ name: { $in: roles } });
-    //     newUser.roles = foundRoles.map(role => role._id);
-    // } else {
-    //     const role = await Role.findOne({ name: 'user' });
-    //     newUser.roles = [role._id];
-    // }
+    // -_- Verificar si los roles enviados existen en la base de datos (por el _id de la tabla roles) y asignarlos al usuario, si no tiene un rol se le asigna por defecto el rol de usuario -_-
+     if (roles) {
+         const foundRoles = await Role.find({ name: { $in: roles } });
+         newUser.roles = foundRoles.map(role => role._id);
+     } else {
+         const role = await Role.findOne({ name: 'user' });
+         newUser.roles = [role._id];
+     }
     const savedUser = await newUser.save();
     //console.log(savedUser)
 
