@@ -50,8 +50,9 @@ const options = {
 };
 // *-_-* --------- FINAL DEL CYBERMIDDLEWARE con las opciones extras PARA CREAR LISTA NEGRA DE IP --------- *-_-* //
 
-// Middleware de registro de seguridad
+// -_- Middleware de registros de seguridad
 app.use(logSecurity);
+
 
 
 
@@ -59,16 +60,8 @@ app.use(logSecurity);
 const accessControlMiddleware = AccessControl(options);
 app.use(accessControlMiddleware);
 
-// Middleware para verificar solicitudes entrantes
-app.use((req, res, next) => {
-    // Coloca aquí la lógica para verificar la solicitud
-    // Por ejemplo, verifica la IP del cliente
-    const clientIP = req.ip; // Obtiene la IP del cliente
-    // Aquí puedes realizar la lógica para verificar si la IP está en la lista de IPs maliciosas
-    // Si la IP está en la lista, bloquea la solicitud y responde con un mensaje adecuado
-    // De lo contrario, permite que la solicitud continúe hacia las rutas
-    next();
-});
+
+
 
 
 // -_- ---------- Ruta principal de la aplicación ---------- -_- //

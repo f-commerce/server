@@ -17,8 +17,8 @@ const securityLogSchema = new Schema({
     requestBody: Object, // -_- ------------ Cuerpo de la solicitud
     actionsTaken: String, // -_- ------------ Acciones tomadas
     attackType: String, // -_- ------------ Tipo de ataque detectado
-    securityCheckResult: String // -_- ------------ Resultado de la verificación de seguridad
-   
+    securityCheckResult: String, // -_- ------------ Resultado de la verificación de seguridad
+    isBlocked: { type: Boolean, default: false }, // Campo para indicar si la IP está bloqueada
 });
 
 export default model('SecurityLog', securityLogSchema);
