@@ -35,19 +35,18 @@ export const createSecurityLog = async (req, res) => {
 
 // Controlador para bloquear una IP
 export const blockIP = async (req, res) => {
-    const userId = req.params; // Obtener el ID del usuario de los parámetros de la solicitud
-    const { isBlocked } = req.body; // Obtener isBlocked e IP del cuerpo de la solicitud
-    console.log("ID del usuario:", userId);
-    console.log("isBlocked:", isBlocked);   
+    const userId = req.params.id; // Obtener el ID del usuario de los parámetros de la solicitud
+    const { isBlocked, clientIP } = req.body; // Obtener isBlocked e IP del cuerpo de la solicitud
+    
     try {
         // Actualizar todos los registros con la IP especificada para establecer isBlocked como true
-        const result = await SecurityLog.findOneAndUpdate( { isBlocked: true });
+        const result = await SecurityLog.findOneAndUpdate({ _id: userId }, { isBlocked: true });
         if (result) {
             // Devolver un mensaje de éxito si se encontró y actualizó el registro
             res.status(200).json({ message: `La IP asociada al usuario con ID ${userId} ha sido bloqueada` });
         } else {
             // Devolver un mensaje de error si no se encontró el registro
-            res.status(404).json({ message: `No se encontró ningún registro con la IP especificada: ${ip}` });
+            res.status(404).json({ message: `No se encontró ningún registro con la IP especificada` });
         }
     } catch (error) {
         // Manejar errores
@@ -60,15 +59,19 @@ export const blockIP = async (req, res) => {
 
   
   // Controlador para desbloquear una IP
-  export const unblockIP = async (req, res) => {
-    const ip = req.body.ip; // Obtener la dirección IP del cuerpo de la solicitud
-    
+  export const unlockIP = async (req, res) => {
+    const userId = req.params.id; // Obtener el ID del usuario de los parámetros de la solicitud
+    const { isBlocked, clientIP } = req.body;
     try {
-        // Actualizar todos los registros con la IP especificada para establecer isBlocked como false
-        await SecurityLog.updateMany({ clientIP: ip }, { $set: { isBlocked: false } });
-        
-        // Devolver un mensaje de éxito
-        res.status(200).json({ message: `La IP ${ip} ha sido desbloqueada` });
+        // Actualizar todos los registros con la IP especificada para establecer isBlocked como true
+        const result = await SecurityLog.findOneAndUpdate({ _id: userId }, { isBlocked: false });
+        if (result) {
+            // Devolver un mensaje de éxito si se encontró y actualizó el registro
+            res.status(200).json({ message: `La IP asociada al usuario con ID ${userId} ha sido desbloqueada` });
+        } else {
+            // Devolver un mensaje de error si no se encontró el registro
+            res.status(404).json({ message: `No se encontró ningún registro con la IP especificada` });
+        }
     } catch (error) {
         // Manejar errores
         console.error('Error al desbloquear la IP:', error);

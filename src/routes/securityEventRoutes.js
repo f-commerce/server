@@ -1,5 +1,5 @@
 import express from 'express';
-import {  getAllSecurityLogs, blockIP, unblockIP  } from '../controllers/SecurityEventController.js'; // Asegúrate de tener la ruta correcta
+import {  getAllSecurityLogs, blockIP, unlockIP } from '../controllers/SecurityEventController.js'; // Asegúrate de tener la ruta correcta
 
 
 const router = express.Router();
@@ -9,9 +9,11 @@ router.get('/logs', getAllSecurityLogs)
 
 // -_- ------------- Rutas para IP maliciosas ------------- -_- //
 
-// Actualizar un registro de seguridad (bloquear/desbloquear IP)
-router.put('/logs/:id', blockIP);
-router.put('/logs/:id', unblockIP);
 
 
+// Ruta para bloquear una IP
+router.put('/block/:id', blockIP);
+
+// Ruta para desbloquear una IP
+ router.put('/unlock/:id', unlockIP );
 export default router;

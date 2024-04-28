@@ -77,6 +77,8 @@ app.get('/', (req, res) => {
 app.use('/api/auth', authRoutes) 
 // Ruta para obtener todos los registros de seguridad de la bd
 app.use('/api/security', securityRoutes);
+// Ruta para bloquear/desbloquear una IP
+app.use('/api/security/logs', securityRoutes);
 // -_- Rutas de usuarios y productos
 app.use('/api/users', usersRoutes)
 app.use('/api/products', productsRoutes)
