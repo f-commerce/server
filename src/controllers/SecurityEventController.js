@@ -3,10 +3,20 @@ import SecurityLog from '../models/securityEventModel.js';
 // Controlador para crear un nuevo registro de seguridad
 export const createSecurityLog = async (req, res) => {
     try {
-        const newSecurityLog = new SecurityLog(req.body);
+        // Crea un objeto nuevo de SecurityLog con los datos de la solicitud
+        const newSecurityLog = new SecurityLog({
+            ...req.body, // Copia todos los campos de req.body
+            requestParams: req.query, // Agrega los parámetros de la solicitud a requestParams
+            timestamp: new Date() // Añade la fecha actual como timestamp
+        });
+        
+        // Guarda el registro de seguridad en la base de datos
         await newSecurityLog.save();
+        
+        // Devuelve una respuesta con el registro de seguridad creado
         res.status(201).json(newSecurityLog);
     } catch (error) {
+        // Maneja cualquier error que pueda ocurrir durante el proceso
         res.status(500).json({ message: error.message });
     }
 };
@@ -21,36 +31,50 @@ export const createSecurityLog = async (req, res) => {
      }
  };
 
- // Controlador para obtener todas las IPs bloqueadas
-export const getAllBlockedIPs = async (req, res) => {
-    try {
-        const blockedIPs = await SecurityLog.distinct('clientIP', { isBlocked: true });
-        res.status(200).json(blockedIPs);
-    } catch (error) {
-        res.status(500).json({ message: 'Error al obtener las IPs bloqueadas', error: error.message });
-    }
-};
+
 
 // Controlador para bloquear una IP
 export const blockIP = async (req, res) => {
-    const { ip } = req.body;
+    const userId = req.params; // Obtener el ID del usuario de los parámetros de la solicitud
+    const { isBlocked } = req.body; // Obtener isBlocked e IP del cuerpo de la solicitud
+    console.log("ID del usuario:", userId);
+    console.log("isBlocked:", isBlocked);   
     try {
-        await SecurityLog.updateMany({ clientIP: ip }, { isBlocked: true });
-        res.status(200).json({ message: `La IP ${ip} ha sido bloqueada` });
+        // Actualizar todos los registros con la IP especificada para establecer isBlocked como true
+        const result = await SecurityLog.findOneAndUpdate( { isBlocked: true });
+        if (result) {
+            // Devolver un mensaje de éxito si se encontró y actualizó el registro
+            res.status(200).json({ message: `La IP asociada al usuario con ID ${userId} ha sido bloqueada` });
+        } else {
+            // Devolver un mensaje de error si no se encontró el registro
+            res.status(404).json({ message: `No se encontró ningún registro con la IP especificada: ${ip}` });
+        }
     } catch (error) {
-        res.status(500).json({ message: 'Error al bloquear la IP', error: error.message });
+        // Manejar errores
+        console.error('Error al bloquear la IP:', error);
+        res.status(500).json({ message: 'Error interno del servidor' });
     }
 };
 
-// Controlador para desbloquear una IP
-export const unblockIP = async (req, res) => {
-    const { ip } = req.body;
+
+
+  
+  // Controlador para desbloquear una IP
+  export const unblockIP = async (req, res) => {
+    const ip = req.body.ip; // Obtener la dirección IP del cuerpo de la solicitud
+    
     try {
-        await SecurityLog.updateMany({ clientIP: ip }, { isBlocked: false });
+        // Actualizar todos los registros con la IP especificada para establecer isBlocked como false
+        await SecurityLog.updateMany({ clientIP: ip }, { $set: { isBlocked: false } });
+        
+        // Devolver un mensaje de éxito
         res.status(200).json({ message: `La IP ${ip} ha sido desbloqueada` });
     } catch (error) {
-        res.status(500).json({ message: 'Error al desbloquear la IP', error: error.message });
+        // Manejar errores
+        console.error('Error al desbloquear la IP:', error);
+        res.status(500).json({ message: 'Error interno del servidor' });
     }
 };
+  
 
 
