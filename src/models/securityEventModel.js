@@ -8,7 +8,7 @@ const securityLogSchema = new Schema({
     requestPath: String,
     requestParams: Object,
     userAgent: String, // -_- ------------ Detalles del agente de usuario
-    
+    sessionID: String, // -_- ------------ ID de la sesión
     httpMethod: String, // -_- ------------ Método HTTP utilizado
     httpStatus: Number, // -_- ------------ Código de estado HTTP
     requestHeaders: Object, // -_- ------------ Cabeceras de la solicitud

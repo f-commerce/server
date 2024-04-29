@@ -5,7 +5,7 @@ import pkg from '../../package.json';
 import productsRoutes from '../routes/productsRoutes.js';
 import authRoutes from '../routes/authRoutes.js';
 import { createRoles } from '../libs/initialSetup.js';
-import usersRoutes from '../routes/userProfileRoutes.js';
+import usersRoutes from "../routes/userRoutes.js"
 import adminAuthRoutes from '../routes/adminAuthRoutes.js';
 import contactRoutes from '../routes/contactRoutes.js';
 import securityRoutes from '../routes/securityEventRoutes.js';
