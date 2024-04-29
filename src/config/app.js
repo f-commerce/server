@@ -5,13 +5,14 @@ import pkg from '../../package.json';
 import productsRoutes from '../routes/productsRoutes.js';
 import authRoutes from '../routes/authRoutes.js';
 import { createRoles } from '../libs/initialSetup.js';
-import usersRoutes from '../routes/userRoutes.js';
+import usersRoutes from '../routes/userProfileRoutes.js';
 import adminAuthRoutes from '../routes/adminAuthRoutes.js';
 import contactRoutes from '../routes/contactRoutes.js';
 import securityRoutes from '../routes/securityEventRoutes.js';
 import { logSecurity } from '../middlewares/securityEventMiddleware.js';
 import rateLimit from 'express-rate-limit';
 import AccessControl from'express-ip-access-control';
+import userProfileRoutes from '../routes/userProfileRoutes.js';
 
 
 const app = express();
@@ -86,6 +87,8 @@ app.use('/api/products', productsRoutes)
 app.use('/api/auth/admin', adminAuthRoutes); 
 // -_- --------  RUTA CONTACTO ---------- -_- //
 app.use('/api/contact', contactRoutes)
+// -_- ---------- Ruta de perfil usuario ---------- -_- //
+app.use('/api/profile', userProfileRoutes);
 
 
 

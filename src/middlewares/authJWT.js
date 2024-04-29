@@ -41,7 +41,19 @@ export const isAdmin = async (req, res, next) => {
 
 };
 
-// ********* OJO FALTA POR VERIFICA IS USER EN MVP Y FUTURA IMPLEMENTACIÓN DE ISSELLER
+// -_- ---------- Comprobamos si es user ---------- -_- //  
+export const isUser = async (req, res, next) => {
+  const user = await UserModel.findById(req.userId);
+  const userRole = await Role.find ({ _id: { $in: user.roles } });
+  console.log(userRole);
+  for (let i = 0; i < userRole.length; i++) {
+    if (userRole[i].name === "user") {
+      next();
+      return;
+    }
+  }
+  return res.status(403).json({ message: "Requiere rol de usuario" });
+};
 
 
 
